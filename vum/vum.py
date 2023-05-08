@@ -42,6 +42,8 @@ class Vum:
         command_prompt_icon: str = ">",
         action_interval: int | float = 0.5,
         is_command_log_enabled: bool = True,
+        log_filename: str = "log.txt",
+        log_user_name: str = "",
     ) -> None:
         """
         Vum is the Vi-unimproved. It is a simple text-based user
@@ -65,6 +67,9 @@ class Vum:
         is_command_log_enabled : bool
             If True, the command log is displayed in the bottom left
             corner of the screen.
+
+        log_user_name : str
+            Name of the user who gave the command for the logging.
         """
         if screen is None:
             """
@@ -75,10 +80,12 @@ class Vum:
             """
             screen = curses.initscr()
         
+        self.log_user_name = log_user_name
         self.screen = screen
         self.command_prompt_icon = f" {command_prompt_icon} "
         self.action_interval = action_interval
         self.is_command_log_enabled = is_command_log_enabled
+        self.log_filename = log_filename
 
         self.n_rows, self.n_cols = self.screen.getmaxyx()
         self.blank_line: str = " "*(self.n_cols - 1)
@@ -206,7 +213,7 @@ class Vum:
             The message to be displayed before the command prompt.
 
         action : Callable
-            A function that is called at regular intervals.
+            A function that is called at regular intervals
 
         Returns
         -------
@@ -300,10 +307,18 @@ class Vum:
                 msg = ""
                 self.command_log.pop(0)
                 self.command_log.append(f"{time.strftime(self.time_fmt, time.localtime())}{self.command_prompt_icon}{command}")
-                # self._logger(command)
                 cursor_pos[1] = x_offset
+                
                 if self.is_command_log_enabled:
-                    self.logger()
+                    with open(self.log_filename, "a") as outfile:
+                        outfile.write(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}, {self.log_user_name}, {command}\n")
+                    
+                    for i in range(self.command_log_length):
+                        self.screen.addstr(self.n_rows - self.command_log_length + i - 1, 0, self.blank_line)
+                        self.screen.addstr(self.n_rows - self.command_log_length + i - 1, 0, self.command_log[i])
+
+                    self.screen.refresh()
+
                 return command
             
             if ord(input_) == KEY_TAB:
@@ -320,13 +335,3 @@ class Vum:
             msg = msg[:cursor_pos[1] - x_offset] + input_ + msg[cursor_pos[1] - x_offset:]
             cursor_pos[1] += 1
             self.screen.addstr(self.n_rows - 1, x_offset, msg)
-
-    def logger(self) -> None:
-        """
-        Display the command log.
-        """
-        for i in range(self.command_log_length):
-            self.screen.addstr(self.n_rows - self.command_log_length + i - 1, 0, self.blank_line)
-            self.screen.addstr(self.n_rows - self.command_log_length + i - 1, 0, self.command_log[i])
-
-        self.screen.refresh()
