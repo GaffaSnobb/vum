@@ -21,6 +21,21 @@ COLOR_DEBUG_PAIR: int = 5
 COLOR_DIM_PAIR: int = 6
 COLOR_SUBHEADER: int = 7
 
+def user_defined_colors():
+    curses.init_color(9, 1000, 1000, 1000)  # Default font white.
+    curses.init_color(10, 118, 118, 118)    # Default background grey.
+    curses.init_color(11, 1000, 0, 0)    # Default font red.
+    curses.init_color(12, 0, 1000, 0)    # Default font green.
+    curses.init_color(13, 80, 80, 80)    # Default background grey.
+    curses.init_color(14, 500, 500, 500)  # Dim white for blinking cursor.
+    curses.init_pair(1, COLOR_DEFAULT_WHITE, COLOR_DEFAULT_GREY)    # Default font-background color pair.
+    curses.init_pair(2, COLOR_DEFAULT_RED, COLOR_DEFAULT_DARK_GREY)
+    curses.init_pair(3, COLOR_DEFAULT_GREEN, COLOR_DEFAULT_DARK_GREY)
+    curses.init_pair(4, COLOR_DEFAULT_WHITE, COLOR_DEFAULT_DARK_GREY)
+    curses.init_pair(5, COLOR_DEFAULT_WHITE, COLOR_DEFAULT_RED)
+    curses.init_pair(6, COLOR_DIM_WHITE, COLOR_DEFAULT_GREY)    # Default font-background color pair.
+    curses.init_pair(7, COLOR_DIM_WHITE, COLOR_DEFAULT_DARK_GREY)    # Default font-background color pair.
+
 class Vum:
     def __init__(self,
         screen = None,
