@@ -11,4 +11,4 @@ c: new feature to existing functionality
 d: bug fixes
 """
 
-from .vum import Vum
+from .vum import *
