@@ -12,6 +12,7 @@ COLOR_DEFAULT_GREEN: int = 12
 COLOR_DEFAULT_DARK_GREY: int = 13
 COLOR_DIM_WHITE: int = 14
 COLOR_BLACK: int = 15
+COLOR_DEFAULT_YELLOW: int = 16
 
 COLOR_DEFAULT_PAIR: int = 1
 COLOR_RED_PAIR: int = 2
@@ -20,21 +21,24 @@ COLOR_DARK_GREY_PAIR: int = 4
 COLOR_DEBUG_PAIR: int = 5
 COLOR_DIM_PAIR: int = 6
 COLOR_SUBHEADER: int = 7
+COLOR_YELLOW_PAIR: int = 8
 
 def user_defined_colors():
-    curses.init_color(9, 1000, 1000, 1000)  # Default font white.
-    curses.init_color(10, 118, 118, 118)    # Default background grey.
-    curses.init_color(11, 1000, 0, 0)    # Default font red.
-    curses.init_color(12, 0, 1000, 0)    # Default font green.
-    curses.init_color(13, 80, 80, 80)    # Default background grey.
-    curses.init_color(14, 500, 500, 500)  # Dim white for blinking cursor.
-    curses.init_pair(1, COLOR_DEFAULT_WHITE, COLOR_DEFAULT_GREY)    # Default font-background color pair.
-    curses.init_pair(2, COLOR_DEFAULT_RED, COLOR_DEFAULT_DARK_GREY)
-    curses.init_pair(3, COLOR_DEFAULT_GREEN, COLOR_DEFAULT_DARK_GREY)
-    curses.init_pair(4, COLOR_DEFAULT_WHITE, COLOR_DEFAULT_DARK_GREY)
-    curses.init_pair(5, COLOR_DEFAULT_WHITE, COLOR_DEFAULT_RED)
-    curses.init_pair(6, COLOR_DIM_WHITE, COLOR_DEFAULT_GREY)    # Default font-background color pair.
-    curses.init_pair(7, COLOR_DIM_WHITE, COLOR_DEFAULT_DARK_GREY)    # Default font-background color pair.
+    curses.init_color(COLOR_DEFAULT_WHITE, 1000, 1000, 1000)  # Default font white.
+    curses.init_color(COLOR_DEFAULT_GREY, 118, 118, 118)    # Default background grey.
+    curses.init_color(COLOR_DEFAULT_RED, 1000, 0, 0)    # Default font red.
+    curses.init_color(COLOR_DEFAULT_GREEN, 0, 1000, 0)    # Default font green.
+    curses.init_color(COLOR_DEFAULT_DARK_GREY, 80, 80, 80)    # Default background grey.
+    curses.init_color(COLOR_DIM_WHITE, 500, 500, 500)  # Dim white for blinking cursor.
+    curses.init_color(COLOR_DEFAULT_YELLOW, 1000, 1000, 0)    # Default font yellow.
+    curses.init_pair(COLOR_DEFAULT_PAIR, COLOR_DEFAULT_WHITE, COLOR_DEFAULT_GREY)    # Default font-background color pair.
+    curses.init_pair(COLOR_RED_PAIR, COLOR_DEFAULT_RED, COLOR_DEFAULT_DARK_GREY)
+    curses.init_pair(COLOR_GREEN_PAIR, COLOR_DEFAULT_GREEN, COLOR_DEFAULT_DARK_GREY)
+    curses.init_pair(COLOR_DARK_GREY_PAIR, COLOR_DEFAULT_WHITE, COLOR_DEFAULT_DARK_GREY)
+    curses.init_pair(COLOR_DEBUG_PAIR, COLOR_DEFAULT_WHITE, COLOR_DEFAULT_RED)
+    curses.init_pair(COLOR_DIM_PAIR, COLOR_DIM_WHITE, COLOR_DEFAULT_GREY)    # Default font-background color pair.
+    curses.init_pair(COLOR_SUBHEADER, COLOR_DIM_WHITE, COLOR_DEFAULT_DARK_GREY)    # Default font-background color pair.
+    curses.init_pair(COLOR_YELLOW_PAIR, COLOR_DEFAULT_YELLOW, COLOR_DEFAULT_DARK_GREY)
 
 class Vum:
     def __init__(self,
@@ -248,6 +252,7 @@ class Vum:
                 current_attr, previous_attr = previous_attr, current_attr
                 self.screen.refresh()
 
+            # time.sleep(2)
             self.screen.move(*cursor_pos)
             try:
                 """
@@ -311,7 +316,7 @@ class Vum:
                 
                 if self.is_command_log_enabled:
                     with open(self.log_filename, "a") as outfile:
-                        outfile.write(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}, {self.log_user_name}, {command}\n")
+                        outfile.write(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}, {self.log_user_name}, Vum: {command}\n")
                     
                     for i in range(self.command_log_length):
                         self.screen.addstr(self.n_rows - self.command_log_length + i - 1, 0, self.blank_line)
