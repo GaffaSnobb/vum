@@ -340,3 +340,12 @@ class Vum:
             msg = msg[:cursor_pos[1] - x_offset] + input_ + msg[cursor_pos[1] - x_offset:]
             cursor_pos[1] += 1
             self.screen.addstr(self.n_rows - 1, x_offset, msg)
+
+    def endwin(self):
+        curses.endwin()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        curses.endwin()
