@@ -1,3 +1,4 @@
+from __future__ import annotations
 import curses, time
 from typing import Callable
 
