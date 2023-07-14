@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'vum',
-    version = '1.0.0.0',    
+    version = '1.0.0.1',    
     description = 'A simple UI with curses',
     # long_description = long_description,
     url = 'https://github.com/GaffaSnobb/vum',
